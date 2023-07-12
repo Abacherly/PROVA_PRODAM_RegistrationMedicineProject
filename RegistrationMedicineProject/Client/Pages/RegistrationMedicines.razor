@@ -1,0 +1,56 @@
+﻿@page "/registrationmedicines"
+
+@inject IRegistrationMedicineService RegistrationMedicineService
+@inject NavigationManager NavigationManager
+
+<PageTitle> Cadastro de Medicamentos </PageTitle>
+
+<h3>Lista de Medicamentos</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome do Medicamento</th>
+            <th>Forma de Administração</th>
+            <th>Classe do Medicamento</th>
+            <th>Classificação</th>
+            <th>Retenção de Receita</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var medicine in RegistrationMedicineService.Medicines)
+        {
+            <tr>
+                <td>@medicine.Name</td>
+                <td>@medicine.Administration</td>
+                <td>@medicine.Class</td>
+                <td>@medicine.Classification</td>
+                <td>@medicine.Retention.Name</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowMedicine(medicine.Id))"><i class="oi oi-pencil"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+<button class="btn btn-primary" @onclick="CreateNewMedicine">Cadastrar Novo Medicamento</button>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RegistrationMedicineService.GetRegistrationMedicines();
+    }
+
+    void ShowMedicine(int id)
+    {
+        NavigationManager.NavigateTo($"medicine/{id}");
+    }
+
+    void CreateNewMedicine()
+    {
+        NavigationManager.NavigateTo("/medicine");
+    }
+}
